@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Jelajah3</string>
+    <string name="home">Home</string>
+    <string name="map">Map</string>
+    <string name="nfctag">NFC Tag</string>
+    <string name="cd_destination_icon">Lokasi Tujuan</string>
+
+</resources>

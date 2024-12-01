@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme -->
+    <style name="Theme.Jelajah3" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryDark">@color/purple_700</item>
+        <item name="colorAccent">@color/teal_200</item>
+
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">@color/purple_700</item>
+        <!-- Customize action bar styles -->
+        <item name="actionBarStyle">@style/MyActionBarStyle</item>
+    </style>
+
+    <!-- Custom style for action bar -->
+    <style name="MyActionBarStyle" parent="@style/Widget.AppCompat.ActionBar.Solid">
+        <item name="background">@color/purple_500</item>
+        <item name="titleTextStyle">@style/MyActionBarTitleText</item>
+    </style>
+
+    <!-- Custom style for action bar title text -->
+    <style name="MyActionBarTitleText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+</resources>
