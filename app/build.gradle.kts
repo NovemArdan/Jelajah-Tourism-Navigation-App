@@ -3,6 +3,12 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
+    id("androidx.navigation.safeargs.kotlin")
+
+    id("kotlin-parcelize")
+    id("kotlin-android")
+
+
 }
 
 android {
@@ -45,16 +51,20 @@ android {
         viewBinding = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
+
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

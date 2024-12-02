@@ -1,7 +1,7 @@
 package com.example.jelajah3.ui.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.location.Address
 import android.location.Geocoder
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,39 +9,56 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.jelajah3.databinding.ItemPlaceBinding
 import com.example.jelajah3.model.Place
-import java.io.IOException
-import java.util.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Locale
 
-class PlacesAdapter(private var places: List<Place>, private val context: Context) : RecyclerView.Adapter<PlacesAdapter.PlaceViewHolder>() {
 
-    class PlaceViewHolder(val binding: ItemPlaceBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(place: Place, context: Context) {
+class PlacesAdapter(
+    private var places: List<Place>,
+    private val context: Context,
+    private val onPlaceClicked: (Place) -> Unit
+) : RecyclerView.Adapter<PlacesAdapter.PlaceViewHolder>() {
+
+    class PlaceViewHolder(val binding: ItemPlaceBinding, val onPlaceClicked: (Place) -> Unit, val context: Context) : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
+        fun bind(place: Place) {
             with(binding) {
                 textViewName.text = place.name
                 textViewRating.text = "Rating: ${place.rating}"
-
-                // Get the location details asynchronously or use a previously fetched value
-                val locationDetails = getAddressFromLocation(place.location.latitude, place.location.longitude, context)
-                textViewLocation.text = "${locationDetails.first}, ${locationDetails.second}"
-
                 Glide.with(imagePlace.context).load(place.photoUrl).into(imagePlace)
+                root.setOnClickListener { onPlaceClicked(place) }
+
+                // Fetch and display location information
+                fetchAndDisplayLocation(place.location.latitude, place.location.longitude)
             }
         }
 
-        private fun getAddressFromLocation(latitude: Double, longitude: Double, context: Context): Pair<String?, String?> {
+        @SuppressLint("SetTextI18n")
+        private fun fetchAndDisplayLocation(latitude: Double, longitude: Double) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val locationDetails = getAddressFromLocation(latitude, longitude)
+                withContext(Dispatchers.Main) {
+                    binding.textViewLocation.text = "${locationDetails.first}, ${locationDetails.second}"
+                }
+            }
+        }
+
+        private fun getAddressFromLocation(latitude: Double, longitude: Double): Pair<String?, String?> {
             val geocoder = Geocoder(context, Locale.getDefault())
             return try {
                 val addresses = geocoder.getFromLocation(latitude, longitude, 1)
                 if (addresses?.isNotEmpty() == true) {
-                    val address = addresses.first()
-                    val city = address.locality  // City
-                    val kecamatan = address.subAdminArea  // Sub-district
-                    Pair(city, kecamatan)
+                    val address = addresses[0]
+                    val city = address.locality // City
+                    val subDistrict = address.subAdminArea // Sub-district
+                    Pair(city, subDistrict)
                 } else {
                     Pair(null, null)
                 }
-            } catch (exception: Exception) {
-                // Log error and return nulls
+            } catch (e: Exception) {
                 Pair(null, null)
             }
         }
@@ -49,17 +66,19 @@ class PlacesAdapter(private var places: List<Place>, private val context: Contex
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
         val binding = ItemPlaceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PlaceViewHolder(binding)
+        return PlaceViewHolder(binding, onPlaceClicked, context)
     }
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
-        holder.bind(places[position], context)
+        holder.bind(places[position])
     }
 
     override fun getItemCount(): Int = places.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updatePlaces(newPlaces: List<Place>) {
         places = newPlaces
         notifyDataSetChanged()
     }
 }
+

@@ -8,8 +8,16 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.jelajah3.ui.home.HomeFragment"
-        android:label="@string/home"
-        tools:layout="@layout/fragment_home" />
+        android:label="Home Fragment"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_placeDetailFragment"
+            app:destination="@id/placeDetailFragment">
+            <argument
+                android:name="place"
+                app:argType="com.example.jelajah3.model.Place" />
+        </action>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_map"
@@ -34,6 +42,16 @@
         android:name="SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/placeDetailFragment"
+        android:name="com.example.jelajah3.ui.PlaceDetailFragment"
+        android:label="Place Detail Fragment"
+        tools:layout="@layout/fragment_place_detail">
+        <argument
+            android:name="place"
+            app:argType="com.example.jelajah3.model.Place" />
+    </fragment>
 
     <action
         android:id="@+id/action_homeFragment_to_settingsFragment"
