@@ -26,7 +26,10 @@ class LoginActivity : AppCompatActivity() {
                 firebaseAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            val intent = Intent(this, MainActivity::class.java)
+                            val username = email.substringBefore('@')
+                            val intent = Intent(this, MainActivity::class.java).apply {
+                                putExtra("username", username)
+                            }
                             startActivity(intent)
                             finish()
                         } else {
@@ -39,7 +42,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnSignup.setOnClickListener {
-            // Redirect to SignupActivity
             startActivity(Intent(this, com.example.jelajah3.ui.signup.SignupActivity::class.java))
         }
     }

@@ -5,5 +5,9 @@
     <string name="nfctag">NFC Tag</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="cd_destination_icon">Lokasi Tujuan</string>
+    <string name="settings">Setting</string>
+    <string name="logout">Logout</string>
+    <string name="search_hint">Cari</string>
+    <string name="search">Cari</string>
 
 </resources>

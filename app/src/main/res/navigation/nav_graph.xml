@@ -29,4 +29,14 @@
         android:label="@string/leaderboard"
         tools:layout="@layout/fragment_leaderboard" />
 
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <action
+        android:id="@+id/action_homeFragment_to_settingsFragment"
+        app:destination="@id/settingsFragment" />
+
 </navigation>
