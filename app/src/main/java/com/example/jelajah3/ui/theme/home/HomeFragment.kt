@@ -11,32 +11,29 @@ import com.example.jelajah3.databinding.FragmentHomeBinding
 import com.example.jelajah3.ui.adapter.PlacesAdapter
 
 class HomeFragment : Fragment() {
-
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        setupRecyclerView()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
-        observePlaces()
+        viewModel.places.observe(viewLifecycleOwner) { places ->
+            (binding.recyclerView.adapter as PlacesAdapter).updatePlaces(places ?: emptyList())
+        }
     }
 
     private fun setupRecyclerView() {
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = PlacesAdapter(emptyList())
-        }
-    }
-
-    private fun observePlaces() {
-        viewModel.places.observe(viewLifecycleOwner) { places ->
-            (binding.recyclerView.adapter as PlacesAdapter).updatePlaces(places)
+            adapter = PlacesAdapter(emptyList(), requireContext())
         }
     }
 
