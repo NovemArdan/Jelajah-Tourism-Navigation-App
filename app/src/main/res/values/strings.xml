@@ -3,6 +3,7 @@
     <string name="home">Home</string>
     <string name="map">Map</string>
     <string name="nfctag">NFC Tag</string>
+    <string name="leaderboard">Leaderboard</string>
     <string name="cd_destination_icon">Lokasi Tujuan</string>
 
 </resources>

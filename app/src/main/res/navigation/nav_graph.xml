@@ -8,8 +8,25 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.jelajah3.ui.home.HomeFragment"
-        android:label="Home"
+        android:label="@string/home"
         tools:layout="@layout/fragment_home" />
 
-    <!-- Define other destinations as needed -->
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.example.jelajah3.ui.map.MapFragment"
+        android:label="@string/map"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/navigation_nfc"
+        android:name="com.example.jelajah3.ui.nfctag.NFCTagFragment"
+        android:label="@string/nfctag"
+        tools:layout="@layout/fragment_nfctag" />
+
+    <fragment
+        android:id="@+id/navigation_leaderboard"
+        android:name="com.example.jelajah3.ui.leaderboard.LeaderboardFragment"
+        android:label="@string/leaderboard"
+        tools:layout="@layout/fragment_leaderboard" />
+
 </navigation>
