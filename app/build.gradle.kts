@@ -99,4 +99,14 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
 
+    implementation (libs.squareup.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.androidx.recyclerview)
+    implementation (libs.androidx.cardview)
+
+    // Glide for image loading
+    implementation (libs.glide)
+    annotationProcessor (libs.compiler)
+
+
 }

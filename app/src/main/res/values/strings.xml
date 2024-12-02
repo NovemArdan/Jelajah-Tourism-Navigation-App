@@ -9,5 +9,6 @@
     <string name="logout">Logout</string>
     <string name="search_hint">Cari</string>
     <string name="search">Cari</string>
+    <string name="place_image">place_image</string>
 
 </resources>

@@ -6,40 +6,38 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.jelajah3.R
 import com.example.jelajah3.databinding.FragmentHomeBinding
+import com.example.jelajah3.ui.adapter.PlacesAdapter
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: HomeViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val username = arguments?.getString("username") ?: ""
-        viewModel.setUserName(username)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.userName.observe(viewLifecycleOwner) { name ->
-            binding.welcomeText.text = "Welcome, $name!"
-        }
+        setupRecyclerView()
+        observePlaces()
+    }
 
-        // Setting click listener untuk button settings
-        binding.settingButton.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
+    private fun setupRecyclerView() {
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = PlacesAdapter(emptyList())
         }
+    }
 
-        // Set up recycler view dan lainnya seperti sebelumnya...
+    private fun observePlaces() {
+        viewModel.places.observe(viewLifecycleOwner) { places ->
+            (binding.recyclerView.adapter as PlacesAdapter).updatePlaces(places)
+        }
     }
 
     override fun onDestroyView() {
