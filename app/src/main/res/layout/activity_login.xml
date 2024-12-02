@@ -11,12 +11,13 @@
         android:layout_height="match_parent"
         tools:context=".ui.login.LoginActivity">
 
-        <!-- Your UI elements here -->
         <EditText
-            android:id="@+id/editTextUsername"
+            android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username"
+
+            android:text="user01@example.com"
+            android:inputType="textEmailAddress"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -26,9 +27,10 @@
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+
+            android:text="password123"
             android:inputType="textPassword"
-            app:layout_constraintTop_toBottomOf="@id/editTextUsername"
+            app:layout_constraintTop_toBottomOf="@id/editTextEmail"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"/>

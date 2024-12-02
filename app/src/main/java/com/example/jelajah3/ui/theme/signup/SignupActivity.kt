@@ -1,41 +1,52 @@
-package com.example.jelajah3.ui.theme.signup
+package com.example.jelajah3.ui.signup
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.viewModels
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.jelajah3.databinding.ActivitySignupBinding
-import com.example.jelajah3.ui.signup.SignupViewModel
-import com.example.jelajah3.ui.theme.login.LoginActivity
+import com.example.jelajah3.ui.login.LoginActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
-    private val viewModel: SignupViewModel by viewModels()
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.buttonSignUp.setOnClickListener {
-            val email = binding.editTextEmail.text.toString()
-            val password = binding.editTextPassword.text.toString()
-            viewModel.signup(email, password)
-        }
+        // Initialize Firebase Auth
+        firebaseAuth = FirebaseAuth.getInstance()
 
-        viewModel.signupResult.observe(this) { isSuccess ->
-            if (isSuccess) {
+        binding.buttonSignUp.setOnClickListener {
+            val email = binding.editTextEmail.text.toString().trim()
+            val password = binding.editTextPassword.text.toString().trim()
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                createAccount(email, password)
+            } else {
+                Toast.makeText(this, "Email and password must not be empty", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun createAccount(email: String, password: String) {
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                // Sign in success, update UI with the signed-in user's information
                 navigateBackToLogin()
             } else {
-                Log.e("SignupActivity", "Signup failed")
+                // If sign in fails, display a message to the user.
+                Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun navigateBackToLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        }
         startActivity(intent)
         finish()
     }
