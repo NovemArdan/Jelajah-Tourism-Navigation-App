@@ -18,7 +18,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun loadPlaces() {
-        RetrofitClient.instance.getAllPlaces().enqueue(object : Callback<Map<String, Place>> {
+        RetrofitClient.jelajahApiService.getAllPlaces().enqueue(object : Callback<Map<String, Place>> {
             override fun onResponse(call: Call<Map<String, Place>>, response: Response<Map<String, Place>>) {
                 if (response.isSuccessful) {
                     _places.postValue(response.body()?.values?.toList())

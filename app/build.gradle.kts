@@ -129,5 +129,4 @@ dependencies {
 
     implementation (libs.android.maps.utils)
 
-
 }

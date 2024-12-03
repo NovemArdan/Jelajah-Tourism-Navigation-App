@@ -4,14 +4,26 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "https://restapijelajah-default-rtdb.firebaseio.com/"
+    private const val FIREBASE_BASE_URL = "https://restapijelajah-default-rtdb.firebaseio.com/"
+    private const val GOOGLE_MAPS_BASE_URL = "https://maps.googleapis.com/"
 
-    val instance: JelajahApiService by lazy {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+    // Instance for Jelajah API service
+    private val retrofitFirebase: Retrofit = Retrofit.Builder()
+        .baseUrl(FIREBASE_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 
-        retrofit.create(JelajahApiService::class.java)
+    val jelajahApiService: JelajahApiService by lazy {
+        retrofitFirebase.create(JelajahApiService::class.java)
+    }
+
+    // Instance for Google Maps Directions API
+    private val retrofitGoogleMaps: Retrofit = Retrofit.Builder()
+        .baseUrl(GOOGLE_MAPS_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    val directionsApiService: DirectionsApi by lazy {
+        retrofitGoogleMaps.create(DirectionsApi::class.java)
     }
 }
