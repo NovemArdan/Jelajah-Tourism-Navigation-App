@@ -123,5 +123,7 @@ dependencies {
 
     implementation (libs.material.v1110)
 
+    implementation (libs.play.services.maps.v1701)
+
 
 }
