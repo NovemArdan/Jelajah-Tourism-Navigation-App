@@ -9,7 +9,6 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="300dp">
-<!--        android:theme="@style/AppTheme.AppBarOverlay">-->
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -47,26 +46,38 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/tv_category"
+                android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:text="Category"/>
+                android:textSize="24sp"
+                android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/tv_description"
+                android:id="@+id/tv_category_rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="Description"/>
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/tv_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="GPS Location"/>
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+
+            <Button
+                android:id="@+id/btn_findRoute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cari Rute"
+                android:background="?attr/colorPrimary"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="16dp"/>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

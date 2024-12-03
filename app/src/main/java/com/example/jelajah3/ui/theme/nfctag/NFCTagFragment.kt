@@ -1,25 +1,53 @@
 package com.example.jelajah3.ui.nfctag
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
-import com.example.jelajah3.R
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.example.jelajah3.databinding.FragmentNfctagBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class NFCTagFragment : Fragment() {
-
-    private lateinit var viewModel: NFCTagViewModel
+    private var _binding: FragmentNfctagBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: NFCTagViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        viewModel = ViewModelProvider(this)[NFCTagViewModel::class.java]
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_nfctag, container, false)
+    ): View {
+        _binding = FragmentNfctagBinding.inflate(inflater, container, false)
+        setupInteraction()
+        return binding.root
     }
 
-    // Additional functions for NFC handling can be added here
+    private fun setupInteraction() {
+        binding.imageViewScan.setOnClickListener {
+            // Check if NFC is available or enabled, you might need to add this logic in ViewModel
+            if (viewModel.isNFCEnabled()) {
+                showScanningDialog()
+            } else {
+                Toast.makeText(context, "NFC is not available or not enabled.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun showScanningDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Proses Scanning...")
+            .setMessage("Dekatkan smartphone anda ke alat tagging")
+            .setNegativeButton("Keluar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

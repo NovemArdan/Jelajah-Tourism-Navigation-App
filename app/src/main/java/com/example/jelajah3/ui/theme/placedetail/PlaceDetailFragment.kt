@@ -27,9 +27,13 @@ class PlaceDetailFragment : Fragment() {
         with(binding) {
             collapsingToolbar.title = place.name
             Glide.with(imgPlaceDetail.context).load(place.photoUrl).into(imgPlaceDetail)
+            tvName.text = place.name
+            tvCategoryRating.text = "${place.category} - ★ ${place.rating}"
+            tvLocation.text = "Lokasi GPS: ${place.location.latitude}, ${place.location.longitude}"
             tvDescription.text = place.description
-            tvCategory.text = place.category
-            tvLocation.text = "Location: ${place.location.latitude}, ${place.location.longitude}"
+            btnFindRoute.setOnClickListener {
+                // Tambahkan aksi untuk tombol Cari Rute di sini
+            }
         }
     }
 
