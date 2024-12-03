@@ -125,5 +125,9 @@ dependencies {
 
     implementation (libs.play.services.maps.v1701)
 
+    implementation (libs.okhttp)
+
+    implementation (libs.android.maps.utils)
+
 
 }

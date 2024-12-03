@@ -1,3 +1,5 @@
+package com.example.jelajah3.ui.map
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,13 +28,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        val latitude = arguments?.getDouble("latitude") ?: 0.0
-        val longitude = arguments?.getDouble("longitude") ?: 0.0
-        val location = LatLng(latitude, longitude)
+        val latitude = arguments?.getFloat("latitude") ?: 0.0f
+        val longitude = arguments?.getFloat("longitude") ?: 0.0f
+        val location = LatLng(latitude.toDouble(), longitude.toDouble())
 
-        map.addMarker(MarkerOptions().position(location).title("Marker in Location"))
+        map.addMarker(MarkerOptions().position(location).title("Destination"))
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
-        map.uiSettings.isZoomControlsEnabled = true  // Enable zoom controls
+        map.uiSettings.isZoomControlsEnabled = true
     }
 
     override fun onDestroyView() {

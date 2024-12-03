@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- navigation_graph.xml -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,7 +9,7 @@
         android:id="@+id/homeFragment"
         android:name="com.example.jelajah3.ui.home.HomeFragment"
         android:label="Home Fragment"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_placeDetailFragment"
             app:destination="@id/placeDetailFragment">
@@ -23,7 +23,7 @@
         android:id="@+id/navigation_map"
         android:name="com.example.jelajah3.ui.map.MapFragment"
         android:label="@string/map"
-        tools:layout="@layout/fragment_map" >
+        tools:layout="@layout/fragment_map">
         <argument
             android:name="latitude"
             app:argType="float" />
@@ -31,8 +31,6 @@
             android:name="longitude"
             app:argType="float" />
     </fragment>
-
-
 
     <fragment
         android:id="@+id/navigation_nfc"
@@ -72,7 +70,6 @@
                 app:argType="float" />
         </action>
     </fragment>
-
 
     <action
         android:id="@+id/action_homeFragment_to_settingsFragment"

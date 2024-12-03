@@ -34,8 +34,8 @@ class PlaceDetailFragment : Fragment() {
             tvDescription.text = place.description
             btnFindRoute.setOnClickListener {
                 val action = PlaceDetailFragmentDirections.actionPlaceDetailFragmentToMapFragment(
-                    latitude = place.location.latitude.toFloat(), // Convert Double to Float
-                    longitude = place.location.longitude.toFloat() // Convert Double to Float
+                    latitude = place.location.latitude.toFloat(),
+                    longitude = place.location.longitude.toFloat()
                 )
                 findNavController().navigate(action)
             }
