@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.jelajah3.databinding.FragmentPlaceDetailBinding
 import com.example.jelajah3.model.Place
@@ -32,7 +33,11 @@ class PlaceDetailFragment : Fragment() {
             tvLocation.text = "Lokasi GPS: ${place.location.latitude}, ${place.location.longitude}"
             tvDescription.text = place.description
             btnFindRoute.setOnClickListener {
-                // Tambahkan aksi untuk tombol Cari Rute di sini
+                val action = PlaceDetailFragmentDirections.actionPlaceDetailFragmentToMapFragment(
+                    latitude = place.location.latitude.toFloat(), // Convert Double to Float
+                    longitude = place.location.longitude.toFloat() // Convert Double to Float
+                )
+                findNavController().navigate(action)
             }
         }
     }

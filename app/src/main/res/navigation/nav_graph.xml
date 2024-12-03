@@ -23,7 +23,16 @@
         android:id="@+id/navigation_map"
         android:name="com.example.jelajah3.ui.map.MapFragment"
         android:label="@string/map"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_map" >
+        <argument
+            android:name="latitude"
+            app:argType="float" />
+        <argument
+            android:name="longitude"
+            app:argType="float" />
+    </fragment>
+
+
 
     <fragment
         android:id="@+id/navigation_nfc"
@@ -51,7 +60,19 @@
         <argument
             android:name="place"
             app:argType="com.example.jelajah3.model.Place" />
+        <!-- Define the action to navigate to MapFragment -->
+        <action
+            android:id="@+id/action_placeDetailFragment_to_mapFragment"
+            app:destination="@id/navigation_map">
+            <argument
+                android:name="latitude"
+                app:argType="float" />
+            <argument
+                android:name="longitude"
+                app:argType="float" />
+        </action>
     </fragment>
+
 
     <action
         android:id="@+id/action_homeFragment_to_settingsFragment"
