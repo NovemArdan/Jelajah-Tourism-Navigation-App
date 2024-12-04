@@ -117,16 +117,12 @@ dependencies {
     // Glide for image loading
     implementation (libs.glide)
     annotationProcessor (libs.compiler)
-
     implementation (libs.play.services.maps)
     implementation (libs.play.services.location)
-
     implementation (libs.material.v1110)
-
     implementation (libs.play.services.maps.v1701)
-
     implementation (libs.okhttp)
-
     implementation (libs.android.maps.utils)
-
+    implementation (libs.androidx.viewpager2)
+    implementation (libs.androidx.fragment.ktx)
 }
