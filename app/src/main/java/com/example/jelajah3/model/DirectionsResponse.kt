@@ -26,7 +26,8 @@ data class Step(
     val polyline: Polyline,
     val duration: Duration,
     val distance: Distance,
-    val html_instructions: String
+    val html_instructions: String,
+    val travel_mode: String
 )
 
 data class Polyline(

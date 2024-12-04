@@ -8,6 +8,14 @@
     android:padding="16dp"
     tools:context=".ui.signup.SignupActivity">
 
+    <!-- Label for the email EditText -->
+    <TextView
+        android:id="@+id/textViewEmailLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textSize="16sp" />
+
     <EditText
         android:id="@+id/editTextEmail"
         android:layout_width="match_parent"
@@ -15,13 +23,22 @@
         android:hint="Email"
         android:inputType="textEmailAddress"/>
 
+    <!-- Label for the password EditText -->
+    <TextView
+        android:id="@+id/textViewPasswordLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Password"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp" />
+
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
         android:inputType="textPassword"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="8dp"/>
 
     <Button
         android:id="@+id/buttonSignUp"

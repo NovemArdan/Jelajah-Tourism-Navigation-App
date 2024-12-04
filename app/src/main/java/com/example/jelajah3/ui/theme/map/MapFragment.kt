@@ -1,8 +1,13 @@
 package com.example.jelajah3.ui.map
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -31,7 +36,7 @@ import com.google.maps.android.PolyUtil
 import retrofit2.Call
 import retrofit2.Response
 
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback, SensorEventListener {
     private var _binding: FragmentMapBinding? = null
     private val binding get() = _binding!!
     private lateinit var map: GoogleMap
@@ -39,12 +44,77 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var locationCallback: LocationCallback
     private var destinationMarker: MarkerOptions? = null
 
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
+    private var magnetometer: Sensor? = null
+    private val gravity = FloatArray(3)
+    private val geomagnetic = FloatArray(3)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        initializeSensors()
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME)
+        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(this)
+    }
+
+    override fun onSensorChanged(event: SensorEvent) {
+        when (event.sensor.type) {
+            Sensor.TYPE_ACCELEROMETER -> System.arraycopy(event.values, 0, gravity, 0, event.values.size)
+            Sensor.TYPE_MAGNETIC_FIELD -> System.arraycopy(event.values, 0, geomagnetic, 0, event.values.size)
+        }
+        updateDirection()
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
+        // Log or handle sensor accuracy changes here
+        Log.d("MapFragment", "Sensor accuracy changed: Sensor = ${sensor.name}, Accuracy = $accuracy")
+    }
+
+    private fun updateDirection() {
+        val rotationMatrix = FloatArray(9)
+        val orientation = FloatArray(3)
+        if (SensorManager.getRotationMatrix(rotationMatrix, null, gravity, geomagnetic)) {
+            SensorManager.getOrientation(rotationMatrix, orientation)
+            val azimuthInRadians = orientation[0]
+            val azimuthInDegrees = Math.toDegrees(azimuthInRadians.toDouble()).toFloat()
+            updateCompassUI(azimuthInDegrees)
+        }
+    }
+
+    private fun updateCompassUI(azimuth: Float) {
+        val compassDirection = getCompassDirection(azimuth)
+        activity?.runOnUiThread {
+            // Menambahkan derajat ke teks
+            binding.directionText.text = "Arah Anda: $compassDirection (${azimuth.toInt()}°)"
+        }
+    }
+
+
+    private fun getCompassDirection(azimuth: Float): String {
+        val directions = arrayOf("Utara", "Timur Laut", "Timur", "Tenggara", "Selatan", "Barat Daya", "Barat", "Barat Laut")
+        val index = ((azimuth + 360) % 360 / 45).toInt() % directions.size
+        return directions[index]
+    }
+
+
+
+    private fun initializeSensors() {
+        sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -123,6 +193,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     if (routes.isNullOrEmpty()) {
                         Log.e("MapFragment", "No routes available")
                     } else {
+
+                        val route = routes.first()
+                        val leg = route.legs.firstOrNull()
+                        activity?.runOnUiThread {
+                            if (leg != null) {
+                                //val modes = leg.steps?.map { it.travel_mode }?.distinct()?.joinToString(", ")
+                                //binding.directionText.text = "Arah Anda: ${leg.startAddress} to ${leg.endAddress}"
+                                binding.distanceText.text = "Jarak: ${leg.distance?.text}"
+                                binding.timeText.text = "Waktu tempuh: ${leg.duration?.text}"
+                                binding.transportModeText.text = "Mode transportasi: ${leg.steps?.firstOrNull()?.travel_mode?: "Unknown"}"
+                                //binding.travelmode.text = "Waktu tempuh: ${leg.steps.traveltravel_mode?.text}"
+                            }
+                        }
+
                         Log.d("MapFragment", "polyline data success send to decodepolyline ${routes?.first()}")
 //                        val steps = routes.first().legs.flatMap { it.steps }
                         val encoded = "`skn@kct`TDUFIDA\\\\?PDP{@BG?SZyANk@HIJE^IP]Zu@x@{Ac@e@UM[Ig@EkBQw@Uk@WSa@Ie@C@E?QCMKAQDQLIHAb@oA\\\\iAv@_CpA}DFQgF_Be@Q{CeA}DiAKb@"
