@@ -24,11 +24,16 @@ import com.google.android.gms.location.LocationServices
 import com.example.jelajah3.MainActivity
 import android.nfc.tech.NfcA
 import android.os.Build
+import androidx.fragment.app.activityViewModels
+import com.example.jelajah3.model.HistoryItem
+import com.example.jelajah3.ui.history.HistoryViewModel
 import java.io.IOException
 
 class NFCTagFragment : Fragment() {
     private var _binding: FragmentNfctagBinding? = null
     private val binding get() = _binding!!
+
+    private val historyViewModel: HistoryViewModel by activityViewModels()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var lastLocationText: String = "Lokasi tidak diketahui"
@@ -93,14 +98,6 @@ class NFCTagFragment : Fragment() {
                 Log.e("NFCTagFragment", "Failed to enable NFC Foreground Dispatch", e)
             }
 
-//            Handler(Looper.getMainLooper()).postDelayed({
-//                try {
-//                    disableNfcForegroundDispatch()
-//                    Log.d("NFCTagFragment", "NFC Foreground Dispatch disabled")
-//                } catch (e: Exception) {
-//                    Log.e("NFCTagFragment", "Failed to disable NFC Foreground Dispatch", e)
-//                }
-//            }, 30000)
         }
     }
 
@@ -167,6 +164,15 @@ class NFCTagFragment : Fragment() {
                 binding.textViewPrompt.text = "Proses scan lokasi sedang berjalan\ndekatkan gawai anda dengan nfc tag\n$locationMessage\n$lastLocationText"
             }
             Log.d("NFCTagFragment", "Tag ID: $tagId") // Log the tag ID
+
+            // Simpan ke History
+            val historyItem = HistoryItem(
+                nomor = (historyViewModel.historyList.value?.size ?: 0) + 1,
+                tagId = tagId,
+                gpsLocation = lastLocationText
+            )
+            historyViewModel.addHistoryItem(historyItem)
+
         } else {
             // Update the UI and log if no tag is detected
             activity?.runOnUiThread {

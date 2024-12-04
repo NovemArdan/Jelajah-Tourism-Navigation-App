@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/tv_nomor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nomor: 1" />
+
+    <TextView
+        android:id="@+id/tv_tag_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tag ID: NFC12345" />
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lokasi: Lat, Long" />
+</LinearLayout>
