@@ -1,22 +1,27 @@
 package com.example.jelajah3.ui.nfctag
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
-import android.app.PendingIntent
+import android.content.pm.PackageManager
 import android.nfc.NdefMessage
+import android.nfc.NfcAdapter
+import android.nfc.Tag
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.jelajah3.databinding.FragmentNfctagBinding
-import android.nfc.NfcAdapter
 import android.util.Log
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.example.jelajah3.MainActivity
-import android.nfc.Tag
 import android.nfc.tech.NfcA
 import android.os.Build
 import java.io.IOException
@@ -25,6 +30,9 @@ class NFCTagFragment : Fragment() {
     private var _binding: FragmentNfctagBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var lastLocationText: String = "Lokasi tidak diketahui"
+
     private val nfcAdapter: NfcAdapter?
         get() = (activity as MainActivity).nfcAdapter
 
@@ -32,9 +40,43 @@ class NFCTagFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        Log.d("NFCTagFragment", "fusedLocationClient: ${fusedLocationClient}")
+        checkLocationPermission()
+
         _binding = FragmentNfctagBinding.inflate(inflater, container, false)
         setupInteraction()
+
+
+
         return binding.root
+    }
+
+    private fun checkLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 100)
+            Log.d("NFCTagFragment", "tidak diberi akses")
+        } else {
+            Log.d("NFCTagFragment", "diberi akses")
+            fetchLocation()
+        }
+    }
+
+    private fun fetchLocation() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            location?.let {
+                lastLocationText = "Posisi Lat: ${location.latitude}, Long: ${location.longitude}"
+                Log.d("NFCTagFragment", "Posisi Lat: ${location.latitude}, Long: ${location.longitude}")
+            }
+        }.addOnFailureListener {
+            Log.e("NFCTagFragment", "Failed to get location", it)
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -122,7 +164,7 @@ class NFCTagFragment : Fragment() {
 
             // Update the UI on the main thread
             activity?.runOnUiThread {
-                binding.textViewPrompt.text = "Proses scan lokasi sedang berjalan\ndekatkan gawai anda dengan nfc tag\n$locationMessage"
+                binding.textViewPrompt.text = "Proses scan lokasi sedang berjalan\ndekatkan gawai anda dengan nfc tag\n$locationMessage\n$lastLocationText"
             }
             Log.d("NFCTagFragment", "Tag ID: $tagId") // Log the tag ID
         } else {
@@ -131,6 +173,14 @@ class NFCTagFragment : Fragment() {
                 binding.textViewPrompt.text = "NFC Tag is null"
             }
             Log.e("NFCTagFragment", "NFC Tag is null")
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 100 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            fetchLocation()
         }
     }
 
