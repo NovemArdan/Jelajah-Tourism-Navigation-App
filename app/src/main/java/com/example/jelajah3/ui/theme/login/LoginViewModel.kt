@@ -9,7 +9,7 @@ class LoginViewModel : ViewModel() {
     val loginResult: LiveData<Boolean> = _loginResult
 
     fun login(email: String, password: String) {
-        // Logic to check credentials
+
         if (email == "example@example.com" && password == "password") {
             _loginResult.value = true
         } else {

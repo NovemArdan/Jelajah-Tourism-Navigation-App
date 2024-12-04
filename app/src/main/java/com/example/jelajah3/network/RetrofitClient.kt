@@ -7,7 +7,7 @@ object RetrofitClient {
     private const val FIREBASE_BASE_URL = "https://restapijelajah-default-rtdb.firebaseio.com/"
     private const val GOOGLE_MAPS_BASE_URL = "https://maps.googleapis.com/"
 
-    // Instance for Jelajah API service
+
     private val retrofitFirebase: Retrofit = Retrofit.Builder()
         .baseUrl(FIREBASE_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
@@ -17,7 +17,7 @@ object RetrofitClient {
         retrofitFirebase.create(JelajahApiService::class.java)
     }
 
-    // Instance for Google Maps Directions API
+
     private val retrofitGoogleMaps: Retrofit = Retrofit.Builder()
         .baseUrl(GOOGLE_MAPS_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())

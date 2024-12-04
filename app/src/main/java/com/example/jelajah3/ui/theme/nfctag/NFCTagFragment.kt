@@ -149,23 +149,23 @@ class NFCTagFragment : Fragment() {
         val tag: Tag? = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
 
         if (tag != null) {
-            // Convert tag ID to a hex string
+
             val tagId = tag.id.joinToString(":") { byte -> "%02X".format(byte) }
             var locationMessage = "Anda sekarang berada di\n$tagId" // Default message
 
-            // Check specific tag IDs and update location message accordingly
+
             when (tagId) {
                 "05:89:91:56:BD:82:00" -> locationMessage = "Anda sedang berada di Fakultas Teknik UGM"
                 "63:E4:A6:ED" -> locationMessage = "Anda sedang berada di Perpustakaan FT UGM"
             }
 
-            // Update the UI on the main thread
+
             activity?.runOnUiThread {
                 binding.textViewPrompt.text = "Proses scan lokasi sedang berjalan\ndekatkan gawai anda dengan nfc tag\n$locationMessage\n$lastLocationText"
             }
             Log.d("NFCTagFragment", "Tag ID: $tagId") // Log the tag ID
 
-            // Simpan ke History
+
             val historyItem = HistoryItem(
                 nomor = (historyViewModel.historyList.value?.size ?: 0) + 1,
                 tagId = tagId,
@@ -174,7 +174,7 @@ class NFCTagFragment : Fragment() {
             historyViewModel.addHistoryItem(historyItem)
 
         } else {
-            // Update the UI and log if no tag is detected
+
             activity?.runOnUiThread {
                 binding.textViewPrompt.text = "NFC Tag is null"
             }

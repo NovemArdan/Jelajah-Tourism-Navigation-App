@@ -17,7 +17,7 @@ class SignupActivity : AppCompatActivity() {
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize Firebase Auth
+
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.buttonSignUp.setOnClickListener {
@@ -34,10 +34,10 @@ class SignupActivity : AppCompatActivity() {
     private fun createAccount(email: String, password: String) {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                // Sign in success, update UI with the signed-in user's information
+                // kembali ke login
                 navigateBackToLogin()
             } else {
-                // If sign in fails, display a message to the user.
+                // sign in gagal
                 Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
             }
         }

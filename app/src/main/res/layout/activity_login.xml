@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <!-- Variables can be declared here if needed -->
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

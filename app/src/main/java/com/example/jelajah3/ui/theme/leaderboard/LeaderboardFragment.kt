@@ -40,14 +40,14 @@ class LeaderboardFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.historyData.observe(viewLifecycleOwner, { historyItems ->
-            // Update your UI for history
-        })
-        viewModel.rankingData.observe(viewLifecycleOwner, { rankingItems ->
-            // Update your UI for ranking
-        })
-        viewModel.challengeData.observe(viewLifecycleOwner, { challengeItems ->
-            // Update your UI for challenges
-        })
+        viewModel.historyData.observe(viewLifecycleOwner) {
+
+        }
+        viewModel.rankingData.observe(viewLifecycleOwner) {
+
+        }
+        viewModel.challengeData.observe(viewLifecycleOwner) {
+
+        }
     }
 }

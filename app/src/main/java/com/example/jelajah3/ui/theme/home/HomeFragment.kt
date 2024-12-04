@@ -10,8 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jelajah3.databinding.FragmentHomeBinding
 import com.example.jelajah3.ui.adapter.PlacesAdapter
-//import com.example.jelajah3.ui.home.HomeViewModel
-//import com.example.jelajah3.ui.home.HomeFragmentDirections
+
 
 
 class HomeFragment : Fragment() {

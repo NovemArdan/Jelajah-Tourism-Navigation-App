@@ -16,7 +16,7 @@
         android:layout_gravity="center_horizontal|top"
         android:layout_marginTop="32dp"/>
 
-    <!-- Button for Logging Out -->
+    <!-- Button Logging Out -->
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"

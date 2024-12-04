@@ -31,7 +31,6 @@ class PlacesAdapter(
                 Glide.with(imagePlace.context).load(place.photoUrl).into(imagePlace)
                 root.setOnClickListener { onPlaceClicked(place) }
 
-                // Fetch and display location information
                 fetchAndDisplayLocation(place.location.latitude, place.location.longitude)
             }
         }
@@ -52,8 +51,8 @@ class PlacesAdapter(
                 val addresses = geocoder.getFromLocation(latitude, longitude, 1)
                 if (addresses?.isNotEmpty() == true) {
                     val address = addresses[0]
-                    val city = address.locality // City
-                    val subDistrict = address.subAdminArea // Sub-district
+                    val city = address.locality // kota
+                    val subDistrict = address.subAdminArea // kecamatan
                     Pair(city, subDistrict)
                 } else {
                     Pair(null, null)

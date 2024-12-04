@@ -32,7 +32,7 @@ class SettingsFragment : Fragment() {
             Log.d("SettingsFragment", "Logout button clicked.")
             viewModel.logout {
                 Log.d("SettingsFragment", "Attempting to navigate to login.")
-                // Navigate to LoginActivity
+
                 val intent = Intent(context, LoginActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)

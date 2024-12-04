@@ -9,15 +9,14 @@ import com.example.jelajah3.ui.theme.ranking.RankingFragment
 
 class LeaderboardViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-    override fun getItemCount(): Int = 3 // Jumlah tab
+    override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> HistoryFragment()    // Tab pertama
-            1 -> RankingFragment()    // Tab kedua
-            2 -> ChallengeFragment()  // Tab ketiga
+            0 -> HistoryFragment()
+            1 -> RankingFragment()
+            2 -> ChallengeFragment()
             else -> throw IllegalStateException("Invalid tab position: $position")
         }
     }
 }
-

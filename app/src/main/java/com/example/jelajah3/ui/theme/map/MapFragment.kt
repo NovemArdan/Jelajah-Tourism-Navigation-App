@@ -43,7 +43,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, SensorEventListener {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private var destinationMarker: MarkerOptions? = null
-
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
     private var magnetometer: Sensor? = null
@@ -79,7 +78,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, SensorEventListener {
     }
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-        // Log or handle sensor accuracy changes here
+
         Log.d("MapFragment", "Sensor accuracy changed: Sensor = ${sensor.name}, Accuracy = $accuracy")
     }
 
@@ -208,13 +207,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, SensorEventListener {
                         }
 
                         Log.d("MapFragment", "polyline data success send to decodepolyline ${routes?.first()}")
-//                        val steps = routes.first().legs.flatMap { it.steps }
+
                         val encoded = "`skn@kct`TDUFIDA\\\\?PDP{@BG?SZyANk@HIJE^IP]Zu@x@{Ac@e@UM[Ig@EkBQw@Uk@WSa@Ie@C@E?QCMKAQDQLIHAb@oA\\\\iAv@_CpA}DFQgF_Be@Q{CeA}DiAKb@"
-                        //steps[0].polyline.
+
                         val path = mutableListOf<LatLng>()
-//                        steps.forEach { step ->
-////                            path.addAll(decodePolyline(encoded))
-//                        }
+
                         Log.d("MapFragment", "${routes?.first()?.overview_polyline}")
 
                         if (routes?.first()?.overview_polyline?.points?.isNullOrBlank() == false) {
@@ -256,44 +253,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, SensorEventListener {
 
     private fun decodePolyline(encoded: String): List<LatLng> {
         return PolyUtil.decode(encoded)
-        val poly = ArrayList<LatLng>()
-        var index = 0
-        var lat = 0
-        var lng = 0
-
-        while (index < encoded.length) {
-            var b: Int
-            var shift = 0
-            var result = 0
-            do {
-                if (index >= encoded.length) {  // Safety check to prevent going out of bounds
-                    break
-                }
-                b = encoded[index++].code - 63
-                result = result or (b and 0x1f shl shift)
-                shift += 5
-            } while (b >= 0x20)
-            val dlat = if (result and 1 != 0) -(result shr 1) else result shr 1
-            lat += dlat
-
-            shift = 0
-            result = 0
-            do {
-                if (index >= encoded.length) {  // Safety check to prevent going out of bounds
-                    break
-                }
-                b = encoded[index++].code - 63
-                result = result or (b and 0x1f shl shift)
-                shift += 5
-            } while (b >= 0x20)
-            val dlng = if (result and 1 != 0) -(result shr 1) else result shr 1
-            lng += dlng
-
-            val p = LatLng(lat.toDouble() / 1E5, lng.toDouble() / 1E5)
-            poly.add(p)
-        }
-
-        return poly
     }
 
     override fun onDestroyView() {
