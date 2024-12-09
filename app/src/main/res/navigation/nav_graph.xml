@@ -14,8 +14,11 @@
             android:id="@+id/action_homeFragment_to_placeDetailFragment"
             app:destination="@id/placeDetailFragment">
             <argument
-                android:name="place"
+                android:name="selectedPlace"
                 app:argType="com.example.jelajah3.model.Place" />
+            <argument
+                android:name="allPlaces"
+                app:argType="com.example.jelajah3.model.Place[]"/>
         </action>
     </fragment>
 
@@ -55,10 +58,6 @@
         android:name="com.example.jelajah3.ui.PlaceDetailFragment"
         android:label="Place Detail Fragment"
         tools:layout="@layout/fragment_place_detail">
-        <argument
-            android:name="place"
-            app:argType="com.example.jelajah3.model.Place" />
-        <!-- Define the action to navigate to MapFragment -->
         <action
             android:id="@+id/action_placeDetailFragment_to_mapFragment"
             app:destination="@id/navigation_map">
@@ -69,6 +68,12 @@
                 android:name="longitude"
                 app:argType="float" />
         </action>
+        <argument
+            android:name="selectedPlace"
+            app:argType="com.example.jelajah3.model.Place" />
+        <argument
+            android:name="allPlaces"
+            app:argType="com.example.jelajah3.model.Place[]" />
     </fragment>
 
     <action

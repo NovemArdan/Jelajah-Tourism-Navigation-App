@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -12,10 +14,33 @@ plugins {
 }
 
 android {
+
+
+// Menginisialisasi Properties dan memuat dari file local.properties
+    val localProperties = Properties().apply {
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            load(localPropertiesFile.inputStream())
+        }
+    }
+
+    val googleApiKey = localProperties.getProperty("GOOGLE_KEY") ?: "No API Key Found"
+
+
     namespace = "com.example.jelajah3"
     compileSdk = 35
 
     defaultConfig {
+
+        // Menggunakan API key dari local.properties
+        resValue("string", "google_maps_key", googleApiKey)
+
+        // Memasukkan Google API key ke dalam BuildConfig
+        buildConfigField("String", "MAPS_API_KEY", "\"${googleApiKey}\"")
+
+        // Using a non-mutable map to set manifest placeholders
+        manifestPlaceholders["MAPS_API_KEY"] = googleApiKey
+
         applicationId = "com.example.jelajah3"
         minSdk = 24
         targetSdk = 35
@@ -30,6 +55,7 @@ android {
 
     buildTypes {
         release {
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -49,6 +75,7 @@ android {
         //noinspection DataBindingWithoutKapt
         dataBinding = true
         viewBinding = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.14"

@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jelajah3.databinding.FragmentHomeBinding
+import com.example.jelajah3.model.Place
 import com.example.jelajah3.ui.adapter.PlacesAdapter
 
 
@@ -36,17 +37,26 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = PlacesAdapter(listOf(), requireContext()) { place ->
-            val action = HomeFragmentDirections.actionHomeFragmentToPlaceDetailFragment(place)
-            findNavController().navigate(action)
-        }
+        // Do not initialize the adapter here with an empty list.
     }
 
     private fun observePlaces() {
         viewModel.places.observe(viewLifecycleOwner) { places ->
-            (binding.recyclerView.adapter as PlacesAdapter).updatePlaces(places ?: listOf())
+            if (binding.recyclerView.adapter == null) {
+                // Correctly initializing the adapter
+                binding.recyclerView.adapter = PlacesAdapter(places, requireContext()) { place, allPlaces ->
+                    // Make sure both place and allPlaces are correctly used
+                    val action = HomeFragmentDirections.actionHomeFragmentToPlaceDetailFragment(place, allPlaces.toTypedArray())
+                    findNavController().navigate(action)
+                }
+            } else {
+                // Update the existing adapter's places
+                (binding.recyclerView.adapter as PlacesAdapter).updatePlaces(places)
+            }
         }
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

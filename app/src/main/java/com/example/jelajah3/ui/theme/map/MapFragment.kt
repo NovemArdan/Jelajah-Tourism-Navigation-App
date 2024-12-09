@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.jelajah3.R
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -32,9 +33,14 @@ import com.google.android.gms.location.LocationResult
 import com.example.jelajah3.databinding.FragmentMapBinding
 import com.example.jelajah3.network.RetrofitClient
 import com.example.jelajah3.model.DirectionsResponse
+import com.example.jelajah3.model.Place
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+//import com.google.maps.android.BuildConfig
 import com.google.maps.android.PolyUtil
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
+import com.example.jelajah3.BuildConfig
 
 class MapFragment : Fragment(), OnMapReadyCallback, SensorEventListener {
     private var _binding: FragmentMapBinding? = null
@@ -49,14 +55,35 @@ class MapFragment : Fragment(), OnMapReadyCallback, SensorEventListener {
     private val gravity = FloatArray(3)
     private val geomagnetic = FloatArray(3)
 
+    private var selectedPlace: Place? = null
+    private var allPlaces: List<Place>? = null
+
+    private fun getApiKey(): String? {
+        return activity?.packageName?.let {
+            activity?.packageManager?.getApplicationInfo(
+                it,
+                PackageManager.GET_META_DATA
+            )?.metaData?.getString("com.google.android.geo.API_KEY")
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        selectedPlace = arguments?.getParcelable("selectedPlace")
+        allPlaces = arguments?.getParcelableArrayList("allPlaces")
+
+//        if (allPlaces == null || allPlaces!!.isEmpty()) {
+//            Toast.makeText(context, "No additional places found!", Toast.LENGTH_SHORT).show()
+//        }
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         initializeSensors()
         return binding.root
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -119,7 +146,24 @@ class MapFragment : Fragment(), OnMapReadyCallback, SensorEventListener {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         setupDestinationMarker()
+        setupMarkers()
         enableMyLocation()
+    }
+
+    private fun setupMarkers() {
+        allPlaces?.forEach { place ->
+            val latLng = LatLng(place.location.latitude, place.location.longitude)
+            val markerOptions = MarkerOptions().position(latLng).title(place.name)
+            map.addMarker(markerOptions)
+        }
+
+        // Highlight selected place if it's available
+        selectedPlace?.let {
+            val selectedLatLng = LatLng(it.location.latitude, it.location.longitude)
+            map.addMarker(MarkerOptions().position(selectedLatLng).title(it.name)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))) // Highlight marker
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(selectedLatLng, 12f))
+        }
     }
 
     private fun setupDestinationMarker() {
@@ -176,12 +220,15 @@ class MapFragment : Fragment(), OnMapReadyCallback, SensorEventListener {
         val directionsApi = RetrofitClient.directionsApiService
         val originParam = "${currentLocation.latitude},${currentLocation.longitude}"
         val destinationParam = "${destination.latitude},${destination.longitude}"
-        val apiKey = "AIzaSyDJHQXB7dOVSg88kQX6a47YD9srrCrWZ1o"
+        //val metadata = context.packageManager.getApplicationInfo(context.packageName, packa)
+
+        val apiKey = BuildConfig.MAPS_API_KEY
+
 
         Log.d("MapFragment", "Requesting directions from $originParam to $destinationParam")
 
         val call = directionsApi.getDirections(originParam, destinationParam, apiKey)
-        call.enqueue(object : retrofit2.Callback<DirectionsResponse> {
+        call.enqueue(object : Callback<DirectionsResponse> {
             override fun onResponse(call: Call<DirectionsResponse>, response: Response<DirectionsResponse>) {
                 Log.d("MapFragment", "Response: ${response.raw().request.url}")
 

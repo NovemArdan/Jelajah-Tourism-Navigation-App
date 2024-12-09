@@ -1,5 +1,6 @@
 package com.example.jelajah3.ui.history
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ class HistoryAdapter : ListAdapter<HistoryItem, HistoryAdapter.HistoryViewHolder
         holder.tvNomor.text = item.nomor.toString()
         holder.tvTagId.text = item.tagId
         holder.tvLocation.text = item.gpsLocation
+        Log.d("HistoryAdapter", "Binding view for item: $item")
     }
 
     class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

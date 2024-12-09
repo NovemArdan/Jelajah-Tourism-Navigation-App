@@ -24,8 +24,8 @@ class ChallengeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         val challengeList = listOf(
-            ChallengeItem(challengeId = 1, title = "10 Tap Challenge", description = "Complete 10 taps", progress = 10, points = 100, completed = false),
-            ChallengeItem(challengeId = 2, title = "50 Tap Challenge", description = "Complete 50 taps", progress = 50, points = 500, completed = true)
+            ChallengeItem(challengeId = 1, title = "Tap 63:E4:A6:ED", description = "100 poin per tap", progress = 1, points = 100, completed = false),
+            //ChallengeItem(challengeId = 2, title = "50 Tap Challenge", description = "Complete 50 taps", progress = 50, points = 500, completed = true)
         )
 
         val adapter = ChallengeAdapter(challengeList)

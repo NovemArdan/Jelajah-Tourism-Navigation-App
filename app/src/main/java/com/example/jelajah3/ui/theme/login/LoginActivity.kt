@@ -33,7 +33,10 @@ class LoginActivity : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         } else {
-                            Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                            // Print the error message
+                            val errorMessage = task.exception?.message ?: "Unknown error"
+                            Toast.makeText(this, "Authentication failed: $errorMessage", Toast.LENGTH_SHORT).show()
+
                         }
                     }
             } else {

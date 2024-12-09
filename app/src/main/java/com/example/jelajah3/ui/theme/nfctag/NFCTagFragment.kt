@@ -27,6 +27,7 @@ import android.os.Build
 import androidx.fragment.app.activityViewModels
 import com.example.jelajah3.model.HistoryItem
 import com.example.jelajah3.ui.history.HistoryViewModel
+import com.example.jelajah3.ui.shared.SharedViewModel
 import java.io.IOException
 
 class NFCTagFragment : Fragment() {
@@ -34,6 +35,9 @@ class NFCTagFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val historyViewModel: HistoryViewModel by activityViewModels()
+
+    // Correctly obtaining the SharedViewModel
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var lastLocationText: String = "Lokasi tidak diketahui"
@@ -52,8 +56,6 @@ class NFCTagFragment : Fragment() {
 
         _binding = FragmentNfctagBinding.inflate(inflater, container, false)
         setupInteraction()
-
-
 
         return binding.root
     }
@@ -152,6 +154,7 @@ class NFCTagFragment : Fragment() {
 
             val tagId = tag.id.joinToString(":") { byte -> "%02X".format(byte) }
             var locationMessage = "Anda sekarang berada di\n$tagId" // Default message
+            Log.d("NFCTagFragment", "Processed tag with ID: $tagId")
 
 
             when (tagId) {
@@ -166,12 +169,16 @@ class NFCTagFragment : Fragment() {
             Log.d("NFCTagFragment", "Tag ID: $tagId") // Log the tag ID
 
 
+//            val historyItem = HistoryItem(nomor = historyViewModel.historyItems.value?.size
+//                ?: (0 + 1), tagId = tagId, gpsLocation = lastLocationText)
+//            historyViewModel.addHistoryItem(historyItem)
+
             val historyItem = HistoryItem(
-                nomor = (historyViewModel.historyList.value?.size ?: 0) + 1,
+                nomor = (sharedViewModel.historyList.value?.size ?: 0) + 1,
                 tagId = tagId,
                 gpsLocation = lastLocationText
             )
-            historyViewModel.addHistoryItem(historyItem)
+            sharedViewModel.addHistoryItem(historyItem)
 
         } else {
 

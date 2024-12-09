@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -18,8 +19,11 @@ class PlaceDetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPlaceDetailBinding.inflate(inflater, container, false)
-        val place = PlaceDetailFragmentArgs.fromBundle(requireArguments()).place
+
+        // Access the 'selectedPlace' argument correctly
+        val place = PlaceDetailFragmentArgs.fromBundle(requireArguments()).selectedPlace
         updateUI(place)
+
         return binding.root
     }
 
@@ -47,3 +51,4 @@ class PlaceDetailFragment : Fragment() {
         _binding = null
     }
 }
+

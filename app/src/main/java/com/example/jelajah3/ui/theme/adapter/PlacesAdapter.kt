@@ -19,17 +19,17 @@ import java.util.Locale
 class PlacesAdapter(
     private var places: List<Place>,
     private val context: Context,
-    private val onPlaceClicked: (Place) -> Unit
+    private val onPlaceClicked: (Place, List<Place>) -> Unit
 ) : RecyclerView.Adapter<PlacesAdapter.PlaceViewHolder>() {
 
-    class PlaceViewHolder(val binding: ItemPlaceBinding, val onPlaceClicked: (Place) -> Unit, val context: Context) : RecyclerView.ViewHolder(binding.root) {
+    class PlaceViewHolder(val binding: ItemPlaceBinding, val onPlaceClicked: (Place, List<Place>) -> Unit, val context: Context) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun bind(place: Place) {
+        fun bind(place: Place, allPlaces: List<Place>) {
             with(binding) {
                 textViewName.text = place.name
                 textViewRating.text = "Rating: ${place.rating}"
                 Glide.with(imagePlace.context).load(place.photoUrl).into(imagePlace)
-                root.setOnClickListener { onPlaceClicked(place) }
+                root.setOnClickListener { onPlaceClicked(place, allPlaces) }
 
                 fetchAndDisplayLocation(place.location.latitude, place.location.longitude)
             }
@@ -69,7 +69,7 @@ class PlacesAdapter(
     }
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
-        holder.bind(places[position])
+        holder.bind(places[position], places)  // Here places is passed as allPlaces, which seems correct
     }
 
     override fun getItemCount(): Int = places.size
